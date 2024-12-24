@@ -3,7 +3,7 @@ import { createProductService } from "../../services/product.service";
 
 const router = Router();
 
-router.post("/createProduct", async (req, res) => {
+router.post("/", async (req, res) => {
   const productService = await createProductService();
   const { name, slug, description, price, categoryIds } = req.body;
   const product = await productService.createProduct(
@@ -16,19 +16,19 @@ router.post("/createProduct", async (req, res) => {
   res.json(product);
 });
 
-router.get("/getProductById", async (req, res) => {
+router.get("/:productId", async (req, res) => {
   const productService = await createProductService();
-  const product = await productService.getProductById(
-    parseInt(req.query.id as string)
-  );
+  const { productId } = req.params;
+  const product = await productService.getProductById(+productId);
   res.json(product);
 });
 
-router.post("/updateProduct", async (req, res) => {
+router.post("/:productId", async (req, res) => {
   const productService = await createProductService();
-  const { id, name, slug, description, price, categoryIds } = req.body;
+  const { productId } = req.params;
+  const { name, slug, description, price, categoryIds } = req.body;
   const product = await productService.updateProduct({
-    id: parseInt(id),
+    id: +productId,
     name,
     slug,
     description,
@@ -38,14 +38,14 @@ router.post("/updateProduct", async (req, res) => {
   res.json(product);
 });
 
-router.post("/deleteProduct", async (req, res) => {
+router.post("/:productId/delete", async (req, res) => {
   const productService = await createProductService();
-  const { id } = req.body;
-  await productService.deleteProduct(parseInt(id));
+  const { productId } = req.params;
+  await productService.deleteProduct(+productId);
   res.send({ message: "Product deleted successfully" });
 });
 
-router.get("/listProducts", async (req, res) => {
+router.get("/", async (req, res) => {
   const productService = await createProductService();
   const {
     page = 1,
@@ -67,7 +67,7 @@ router.get("/listProducts", async (req, res) => {
   res.json({ products, total });
 });
 
-router.get("/listProducts.csv", async (req, res) => {
+router.get(".csv", async (req, res) => {
   const productService = await createProductService();
   const {
     page = 1,
