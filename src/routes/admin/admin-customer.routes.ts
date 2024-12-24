@@ -12,7 +12,8 @@ router.post('/', async (req, res) => {
 
 router.get('/:customerId', async (req, res) => {
     const customerService = await createCustomerService();
-    const customer = await customerService.getCustomer(+req.params.customerId);
+    const { customerId } = req.params;
+    const customer = await customerService.getCustomer(+customerId);
     res.send(customer ? customer : { message: 'Customer not found' });
     //res.json(customer);
 });
