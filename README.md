@@ -180,3 +180,16 @@ POST /customers HTTP/1.1
 | Clear the cart                                | POST        | /carts/clear                                   |
 | Create an order                               | POST        | /orders                                        |
 | List orders with pagination                   | GET         | /orders                                        |
+
+## Lista de verbos
+| **Verbo**   | **Objetivo**                        | **Idempotente** | **Safe** |
+|-------------|-------------------------------------|----------------|---------|
+| `GET`       | Recuperar recursos                  | Sim            | Sim     |
+| `POST`      | Criar um recurso                    | Não            | Não     |
+| `PUT`       | Substituir recurso completamente    | Sim            | Não     |
+| `PATCH`     | Atualizar parcialmente um recurso   | Sim            | Não     |
+| `DELETE`    | Remover um recurso                  | Sim            | Não     |
+| `HEAD`      | Obter cabeçalhos                    | Sim            | Sim     |
+| `OPTIONS`   | Verificar métodos permitidos        | Sim            | Sim     |
+| `TRACE`     | Depurar requisição                  | Sim            | Não     |
+| `CONNECT`   | Estabelecer túnel                   | Não            | Não     |
