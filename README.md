@@ -158,18 +158,18 @@ POST /customers HTTP/1.1
 | Create a customer                             | POST        | /customers                                     |
 | Get a customer by ID                          | GET         | /admin/customers/:customer_id                  |
 | List customers with pagination                | GET         | /admin/customers                               |
-| Update a customer                             | POST        | /admin/customers/:customer_id                  |
+| Update a customer                             | PATCH       | /admin/customers/:customer_id                  |
 | Delete a customer                             | POST        | /admin/customers/:customer_id/delete           |
 | Create a category                             | POST        | /admin/categories                              |
 | Get a category by slug                        | GET         | /categories/:category_slug                     |
 | List categories with pagination               | GET         | /categories                                    |
 | List categories in admin with pagination      | GET         | /admin/categories                              |
-| Update a category                             | POST        | /admin/categories/:category_id                 |
+| Update a category                             | PATCH       | /admin/categories/:category_id                 |
 | Delete a category                             | POST        | /admin/categories/:category_id/delete          |
 | Create a product                              | POST        | /admin/products                                |
 | Get a product by ID                           | GET         | /admin/products/:product_id                    |
 | Get a product by slug                         | GET         | /products/:product_slug                        |
-| Update a product                              | POST        | /admin/products/:product_id                    |
+| Update a product                              | PATCH       | /admin/products/:product_id                    |
 | Delete a product                              | POST        | /admin/products/:product_id/delete             |
 | List products with pagination                 | GET         | /products                                      |
 | List products in admin with pagination        | GET         | /admin/products                                |
@@ -193,4 +193,3 @@ POST /customers HTTP/1.1
 | `OPTIONS`   | Verificar métodos permitidos        | Sim            | Sim     |
 | `TRACE`     | Depurar requisição                  | Sim            | Não     |
 | `CONNECT`   | Estabelecer túnel                   | Não            | Não     |
-
