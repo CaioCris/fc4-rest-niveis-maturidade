@@ -3,22 +3,25 @@ import { createCartService } from "../services/cart.service";
 
 const router = Router();
 
-router.post("/items", async (req, res) => {
+router.post("/", async (req, res) => {
   const cartService = await createCartService();
   //@ts-expect-error
-  const cartId = req.session.cartId;
+  const customerId = req.userId;
+  const cart = await cartService.createCart(customerId);
+  res.json(cart);
+});
+
+router.post("/:cartUuid/items", async (req, res) => {
+  const cartService = await createCartService();
   // @ts-expect-error
   const customerId = req.userId;
   const { productId, quantity } = req.body;
   const cart = await cartService.addItemToCart({
+    uuid: req.params.cartUuid,
     customerId: customerId,
-    id: cartId,
     productId: parseInt(productId),
     quantity: parseInt(quantity),
   });
-  //@ts-expect-error
-  req.session.cartId = cart.id;
-  req.session.save();
   res.json({
     id: cart.id,
     items: cart.items.map((item) => ({
@@ -35,31 +38,27 @@ router.post("/items", async (req, res) => {
   });
 });
 
-router.get("/", async (req, res) => {
+router.get("/:cartUuid", async (req, res) => {
   const cartService = await createCartService();
-  //@ts-expect-error
-  const cartId = req.session.cartId;
-  const cart = await cartService.getCart(parseInt(cartId as string));
+  const cartUuid = req.params.cartUuid;
+  const cart = await cartService.getCart(cartUuid);
   res.json(cart);
 });
 
-router.delete("/items/:cartItemId", async (req, res) => {
+router.delete("/:cartUuid/items/:cartItemId", async (req, res) => {
   const cartService = await createCartService();
-  const { cartItemId } = req.params;
-  //@ts-expect-error
-  const cartId = req.session.cartId;
+  const { cartUuid, cartItemId } = req.params;
   await cartService.removeItemFromCart({
-    cartId: +cartId,
+    cartUuid,
     cartItemId: +cartItemId,
   });
   res.send({ message: "Item removed from cart" });
 });
 
-router.post("/clear", async (req, res) => {
+router.post("/:cartUuid/clear", async (req, res) => {
   const cartService = await createCartService();
-  //@ts-expect-error
-  const cartId = req.session.cartId;
-  const cart = await cartService.clearCart(cartId);
+  const cartUuid = req.params.cartUuid;
+  const cart = await cartService.clearCart(cartUuid);
   res.json(cart);
 });
 
