@@ -38,7 +38,7 @@ router.patch("/:productId", async (req, res) => {
   res.json(product);
 });
 
-router.post("/:productId/delete", async (req, res) => {
+router.delete("/:productId", async (req, res) => {
   const productService = await createProductService();
   const { productId } = req.params;
   await productService.deleteProduct(+productId);
