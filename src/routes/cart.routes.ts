@@ -1,14 +1,16 @@
 import { Router } from "express";
 import { createCartService } from "../services/cart.service";
+import { Resource } from "../http/resource";
 
 const router = Router();
 
-router.post("/", async (req, res) => {
+router.post("/", async (req, res, next) => {
   const cartService = await createCartService();
   //@ts-expect-error
   const customerId = req.userId;
   const cart = await cartService.createCart(customerId);
-  res.json(cart);
+  const resource = new Resource(cart);
+  next(resource);
 });
 
 router.post("/:cartUuid/items", async (req, res) => {
@@ -38,11 +40,12 @@ router.post("/:cartUuid/items", async (req, res) => {
   });
 });
 
-router.get("/:cartUuid", async (req, res) => {
+router.get("/:cartUuid", async (req, res, next) => {
   const cartService = await createCartService();
   const cartUuid = req.params.cartUuid;
   const cart = await cartService.getCart(cartUuid);
-  res.json(cart);
+  const resource = new Resource(cart);
+  next(resource);
 });
 
 router.delete("/:cartUuid/items/:cartItemId", async (req, res) => {
@@ -55,11 +58,12 @@ router.delete("/:cartUuid/items/:cartItemId", async (req, res) => {
   res.send({ message: "Item removed from cart" });
 });
 
-router.post("/:cartUuid/clear", async (req, res) => {
+router.post("/:cartUuid/clear", async (req, res, next) => {
   const cartService = await createCartService();
   const cartUuid = req.params.cartUuid;
   const cart = await cartService.clearCart(cartUuid);
-  res.json(cart);
+  const resource = new Resource(cart);
+  next(resource);
 });
 
 export default router;

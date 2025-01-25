@@ -1,12 +1,14 @@
 import { Router } from 'express';
 import { createCategoryService } from '../services/category.service';
+import { Resource } from '../http/resource';
 
 const router = Router();
 
-router.get('/:categorySlug', async (req, res) => {
+router.get('/:categorySlug', async (req, res, next) => {
     const categoryService = await createCategoryService();
     const category = await categoryService.getCategoryBySlug(req.params.categorySlug);
-    res.json(category);
+      const resource = new Resource(category);
+      next(resource);
 });
 
 router.get('/', async (req, res) => {
