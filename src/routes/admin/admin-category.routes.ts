@@ -16,6 +16,13 @@ router.get('/:categoryId', async (req, res, next) => {
     const categoryService = await createCategoryService();
     const { categoryId } = req.params;
     const category = await categoryService.getCategoryById(+categoryId);
+    if(!category) {
+        res.status(404).json({ 
+          title: 'Not Found',
+          status: 404,
+          detail: `Category with id ${categoryId} not found`
+         });
+      }
     const resource = new Resource(category);
     next(resource);
 });

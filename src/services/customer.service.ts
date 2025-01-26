@@ -2,6 +2,7 @@ import { Repository } from "typeorm";
 import { Customer } from "../entities/Customer";
 import { User } from "../entities/User";
 import { createDatabaseConnection } from "../database";
+import { UserAlreadyExistsError } from "../errors";
 
 export class CustomerService {
   constructor(private customerRepository: Repository<Customer>,private userRepository: Repository<User>) {}
@@ -92,11 +93,4 @@ export class CustomerService {
 export async function createCustomerService(): Promise<CustomerService> {
   const { customerRepository, userRepository } = await createDatabaseConnection();
   return new CustomerService(customerRepository, userRepository);
-}
-
-export class UserAlreadyExistsError extends Error {
-  constructor(email: string) {
-    super(`User with email ${email} already exists`);
-    this.name = "UserAlreadyExistsError";
-  }
 }

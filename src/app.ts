@@ -10,12 +10,12 @@ import adminCustomerRoutes from "./routes/admin/admin-customer.routes";
 import adminCategoryRoutes from "./routes/admin/admin-category.routes";
 import loginRoutes from "./routes/session-auth.routes";
 import jwtAuthRoutes from "./routes/jwt-auth.routes";
-import { createCustomerService, UserAlreadyExistsError } from "./services/customer.service";
+import { createCustomerService } from "./services/customer.service";
 // import session from "express-session";
 import jwt from "jsonwebtoken";
 import { Resource } from "./http/resource";
-import { User } from "./entities/User";
-import { ValidationError } from "./errors";
+import { NotFoundError, UserAlreadyExistsError, ValidationError } from "./errors";
+import { Not } from "typeorm";
 
 const app = express();
 const PORT = process.env.PORT || 3000;
@@ -99,6 +99,14 @@ app.use((error: Error, req: Request, res: Response, next: NextFunction) => {
     return res.status(400).json({
       title: 'Bad Request',
       status: 400,
+      detail: error.message
+    });
+  }
+
+  if (error instanceof NotFoundError) {
+    return res.status(404).json({
+      title: 'Not Found',
+      status: 404,
       detail: error.message
     });
   }

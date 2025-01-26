@@ -176,7 +176,7 @@ POST /customers HTTP/1.1
 | Get CSV of products                           | GET         | /admin/products.csv                            |
 | Create a cart                                 | POST        | /carts                                         | 
 | Add an item to the cart                       | POST        | /carts/:cart_uuid/items                        | 
-| Get a cart by ID                              | GET         | /carts:cart_uuid                                |
+| Get a cart by ID                              | GET         | /carts:cart_uuid                               |
 | Remove an item from the cart                  | DELETE      | /carts/:cart_uuid/items/:cart_item_id          |
 | Clear the cart                                | POST        | /carts/:cart_uuid/clear                        |
 | Create an order                               | POST        | /orders                                        |

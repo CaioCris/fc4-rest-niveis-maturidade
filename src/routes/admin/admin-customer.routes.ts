@@ -16,6 +16,13 @@ router.get('/:customerId', async (req, res, next) => {
     const customerService = await createCustomerService();
     const { customerId } = req.params;
     const customer = await customerService.getCustomer(+customerId);
+    if(!customer) {
+        res.status(404).json({ 
+          title: 'Not Found',
+          status: 404,
+          detail: `Customer with id ${customerId} not found`
+         });
+      }
     const resource = new Resource(customer);
     next(resource);
 });

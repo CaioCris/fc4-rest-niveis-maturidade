@@ -3,6 +3,7 @@ import { Cart, CartItem } from "../entities/Cart";
 import { Customer } from "../entities/Customer";
 import { Product } from "../entities/Product";
 import { createDatabaseConnection } from "../database";
+import { NotFoundError } from "../errors";
 
 export class CartService {
   constructor(
@@ -26,7 +27,7 @@ export class CartService {
         where: { id: customerId },
       });
       if (!customer) {
-        throw new Error("Customer not found");
+        throw new NotFoundError(`Customer with id ${customerId} not found`);
       }
     }
 
@@ -62,14 +63,15 @@ export class CartService {
       : null;
 
     if (!cart) {
-      throw new Error("Cart not found");
+      throw new NotFoundError(`Cart with uuid ${uuid} not found`);
     }
 
     const product = await this.productRepository.findOne({
       where: { id: productId },
     });
+
     if (!product) {
-      throw new Error("Product not found");
+      throw new NotFoundError(`Product with id ${productId} not found`);
     }
 
     let cartItem = cart.items.find((item) => item.product.id === productId);
@@ -100,7 +102,7 @@ export class CartService {
     });
 
     if (!cartItem) {
-      throw new Error("Cart item not found");
+      throw new NotFoundError(`Item with id ${cartItemId} not found`);
     }
 
     await this.cartItemRepository.remove(cartItem);

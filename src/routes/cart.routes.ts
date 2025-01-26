@@ -44,6 +44,13 @@ router.get("/:cartUuid", async (req, res, next) => {
   const cartService = await createCartService();
   const cartUuid = req.params.cartUuid;
   const cart = await cartService.getCart(cartUuid);
+  if(!cart) {
+    res.status(404).json({ 
+      title: 'Not Found',
+      status: 404,
+      detail: `Cart with uuid ${cartUuid} not found`
+     });
+  }
   const resource = new Resource(cart);
   next(resource);
 });
