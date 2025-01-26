@@ -2,6 +2,7 @@ import { Router } from "express";
 import { createProductService } from "../../services/product.service";
 import { Resource, ResourceCollection } from "../../http/resource";
 import { nextTick } from "process";
+import { stat } from "fs";
 
 const router = Router();
 
@@ -15,6 +16,7 @@ router.post("/", async (req, res, next) => {
     price,
     categoryIds
   );
+  res.set("Location", `/admin/products/${product.id}`).status(201);
   const resource = new Resource(product);
   next(resource);
 });
@@ -23,6 +25,13 @@ router.get("/:productId", async (req, res, next) => {
   const productService = await createProductService();
   const { productId } = req.params;
   const product = await productService.getProductById(+productId);
+  if(!product) {
+    res.status(404).json({ 
+      title: 'Not Found',
+      status: 404,
+      detail: `Product with id ${productId} not found`
+     });
+  }
   const resource = new Resource(product);
   next(resource);
 });
@@ -47,7 +56,7 @@ router.delete("/:productId", async (req, res) => {
   const productService = await createProductService();
   const { productId } = req.params;
   await productService.deleteProduct(+productId);
-  res.send({ message: "Product deleted successfully" });
+  res.status(204).end();
 });
 
 router.get("/", async (req, res, next) => {

@@ -69,10 +69,6 @@ DELETE  http://localhost:3000/admin/customers/{{ customer_id }}
 Content-Type: application/json
 Authorization: Bearer {{ token }}
 
-{
-  "id": 1
-}
-
 ### 👉👉👉 Category Endpoints 👈👈👈
 
 # @name createCategory
@@ -113,11 +109,6 @@ Authorization: Bearer {{ token }}
 DELETE  http://localhost:3000/admin/categories/{{ category_id }}
 Content-Type: application/json
 Authorization: Bearer {{ token }}
-
-{
-  "id": "{{ category_id }}"
-}
-
 
 ### 👉👉👉 Product Endpoints 👈👈👈
 
@@ -164,10 +155,6 @@ DELETE  http://localhost:3000/admin/products/{{ product_id }}
 Content-Type: application/json
 Authorization: Bearer {{ token }}
 
-{
-  "id": "{{ product_id }}"
-}
-
 ### List products with pagination and optional filtering&name=Product&categories_slug=category-slug&user_id=1
 GET http://localhost:3000/products?page=1&limit=10
 
@@ -205,10 +192,6 @@ GET http://localhost:3000/carts/{{cart_uuid}}
 ### Remove an item from the cart
 DELETE  http://localhost:3000/carts/{{cart_uuid}}/items/1
 Content-Type: application/json
-
-{
-  "cartItemId": 1
-}
 
 ### Clear the cart
 POST http://localhost:3000/carts/{{cart_uuid}}/clear

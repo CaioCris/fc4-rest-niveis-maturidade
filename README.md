@@ -194,3 +194,6 @@ POST /customers HTTP/1.1
 | `OPTIONS`   | Verificar métodos permitidos        | Sim            | Sim     |
 | `TRACE`     | Depurar requisição                  | Sim            | Não     |
 | `CONNECT`   | Estabelecer túnel                   | Não            | Não     |
+
+# Lista dos status codes
+https://developer.mozilla.org/pt-BR/docs/Web/HTTP/Status

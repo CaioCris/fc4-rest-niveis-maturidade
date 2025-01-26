@@ -10,10 +10,12 @@ import adminCustomerRoutes from "./routes/admin/admin-customer.routes";
 import adminCategoryRoutes from "./routes/admin/admin-category.routes";
 import loginRoutes from "./routes/session-auth.routes";
 import jwtAuthRoutes from "./routes/jwt-auth.routes";
-import { createCustomerService } from "./services/customer.service";
+import { createCustomerService, UserAlreadyExistsError } from "./services/customer.service";
 // import session from "express-session";
 import jwt from "jsonwebtoken";
 import { Resource } from "./http/resource";
+import { User } from "./entities/User";
+import { ValidationError } from "./errors";
 
 const app = express();
 const PORT = process.env.PORT || 3000;
@@ -53,7 +55,7 @@ app.use(async (req, res, next) => {
     const authHeader = req.headers.authorization;
 
     if (!authHeader) {
-      return res.status(200).send({message: "Unauthorized"});
+      return res.status(200).send({ message: "Unauthorized" });
     }
 
     const token = authHeader.split(" ")[1];
@@ -63,7 +65,7 @@ app.use(async (req, res, next) => {
       //@ts-expect-error
       req.userId = decoded.sub;
     } catch (e) {
-      return res.status(200).send({message: "Unauthorized"});
+      return res.status(200).send({ message: "Unauthorized" });
     }
   }
 
@@ -86,11 +88,49 @@ app.get("/", async (req, res) => {
   res.send("Hello World!");
 });
 
+app.use((error: Error, req: Request, res: Response, next: NextFunction) => {
+  if (!(error instanceof Error)) {
+    return next(error);
+  }
+
+  console.log(error);
+
+  if (error instanceof SyntaxError) {
+    return res.status(400).json({
+      title: 'Bad Request',
+      status: 400,
+      detail: error.message
+    });
+  }
+
+  if (error instanceof UserAlreadyExistsError) {
+    return res.status(409).json({
+      title: 'Conflict',
+      status: 409,
+      detail: error.message
+    });
+  }
+
+  if (error instanceof ValidationError) {
+    return res.status(422).json({
+      title: 'Unprocessable Entity',
+      status: 422,
+      detail: {
+        errors: error.error.map((e) => ({
+          field: e.property,
+          constraints: e.constraints,
+        })),
+      }
+    });
+  }
+
+})
+
 app.use((result: Resource, req: Request, res: Response, next: NextFunction) => {
   if (result instanceof Resource) {
     return res.json(result.toJson());
-  } 
-    next(result);
+  }
+  next(result);
 })
 
 app.listen(PORT, async () => {
